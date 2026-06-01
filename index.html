@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notion Elevation Tools</title>
+  <meta name="description" content="Structured thinking systems for professionals and creators. Templates, trackers, and decision tools built on Notion Elevation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f4f0;
+      --accent: #c8b89a;
+      --muted: #888;
+      --border: #222;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Libre Baskerville', Georgia, serif;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* NOISE TEXTURE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* NAV */
+    nav {
+      padding: 2rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--white); }
+
+    /* HERO */
+    .hero {
+      padding: 6rem 0 5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: block;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.1s forwards;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: #bbb;
+      max-width: 520px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.35s forwards;
+    }
+
+    /* DIVIDER */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 3.5rem 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .divider-text {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* SYSTEM STATEMENT */
+    .system-statement {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+    .system-statement h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 1.25rem;
+    }
+    .system-statement p {
+      color: #bbb;
+      font-size: 1rem;
+      max-width: 600px;
+    }
+
+    /* CATEGORIES */
+    .categories {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .categories h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 2.5rem;
+    }
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+    }
+    .category-item {
+      padding: 1.75rem 1.5rem;
+      border-right: 1px solid var(--border);
+      background: #0f0f0f;
+      transition: background 0.2s;
+    }
+    .category-item:last-child { border-right: none; }
+    .category-item:hover { background: #161616; }
+    .category-icon {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .category-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      line-height: 1.4;
+    }
+
+    /* FEATURED TOOLS */
+    .featured {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .featured h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 2.5rem;
+    }
+    .tool-list { display: flex; flex-direction: column; gap: 0; }
+    .tool-item {
+      display: grid;
+      grid-template-columns: 2rem 1fr auto;
+      align-items: start;
+      gap: 1.25rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .tool-item:last-child { border-bottom: none; }
+    .tool-item:hover .tool-arrow { transform: translateX(4px); color: var(--accent); }
+    .tool-item:hover .tool-title { color: var(--accent); }
+    .tool-number {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      padding-top: 0.25rem;
+    }
+    .tool-body {}
+    .tool-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      transition: color 0.2s;
+    }
+    .tool-desc {
+      font-size: 0.88rem;
+      color: #999;
+      line-height: 1.6;
+    }
+    .tool-arrow {
+      font-size: 1.1rem;
+      color: var(--muted);
+      padding-top: 0.2rem;
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    /* WHY THIS EXISTS */
+    .why {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .why-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .why h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+    .why h2 em { font-style: italic; color: var(--accent); }
+    .why p {
+      color: #aaa;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .why-quote {
+      border-left: 2px solid var(--accent);
+      padding: 1.5rem 1.75rem;
+      background: #111;
+    }
+    .why-quote blockquote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--white);
+    }
+    .why-quote cite {
+      display: block;
+      margin-top: 1rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    /* CTA */
+    .cta {
+      padding: 5rem 0;
+      text-align: center;
+    }
+    .cta-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+    .cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+    .cta p {
+      color: #999;
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+    }
+    .cta-btn {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--white);
+      padding: 1rem 2.5rem;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cta-btn:hover {
+      background: var(--accent);
+      color: var(--black);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+    }
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-brand {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .footer-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .footer-link:hover { color: var(--white); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .why-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .category-grid { grid-template-columns: 1fr 1fr; }
+      .tool-item { grid-template-columns: 1.5rem 1fr auto; gap: 0.75rem; }
+      nav .container { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <a href="https://notionelevation.com" class="nav-logo">Notion Elevation</a>
+      <a href="https://notionelevation.com" class="nav-link">← Main Platform</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <span class="hero-label">Open Tool Library</span>
+      <h1>Systems that make your<br><em>capability visible.</em></h1>
+      <p class="hero-sub">A structured collection of thinking tools, trackers, and decision systems built for professionals and creators who are done with scattered effort.</p>
+    </div>
+  </section>
+
+  <!-- SYSTEM STATEMENT -->
+  <section class="system-statement">
+    <div class="container">
+      <span class="section-label">The Philosophy</span>
+      <h2>Not templates. Thinking systems.</h2>
+      <p>Notion Elevation Tools are not random templates. They are structured frameworks that help you measure, organize, and improve how you work and create built around the principle that structure is the missing layer between intention and output.</p>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories">
+    <div class="container">
+      <span class="section-label">What's Here</span>
+      <h2>Tool Categories</h2>
+      <div class="category-grid">
+        <div class="category-item">
+          <span class="category-icon">🧭</span>
+          <span class="category-name">Self-Tracking Systems</span>
+        </div>
+        <div class="category-item">
+          <span class="category-icon">⚡</span>
+          <span class="category-name">Productivity Tools</span>
+        </div>
+        <div class="category-item">
+          <span class="category-icon">💡</span>
+          <span class="category-name">Idea Structuring Tools</span>
+        </div>
+        <div class="category-item">
+          <span class="category-icon">📊</span>
+          <span class="category-name">Decision & Clarity Systems</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED TOOLS -->
+  <section class="featured">
+    <div class="container">
+      <span class="section-label">Featured</span>
+      <h2>Tools to Start With</h2>
+      <div class="tool-list">
+
+        <a href="https://notionelevation.com/notion-elevation-tools/notion-elevation-systems-library/" class="tool-item">
+          <span class="tool-number">01</span>
+          <div class="tool-body">
+            <div class="tool-title">Notion Elevation Systems Library</div>
+            <div class="tool-desc">A growing collection of visual productivity frameworks built for stability not hacks. Browse structured systems that adapt as your work evolves. Free access.</div>
+          </div>
+          <span class="tool-arrow">→</span>
+        </a>
+
+        <a href="https://notionelevation.com/notion-elevation-tools/deadline-pressure-meter/" class="tool-item">
+          <span class="tool-number">02</span>
+          <div class="tool-body">
+            <div class="tool-title">Deadline Pressure Meter</div>
+            <div class="tool-desc">Measure the real pressure behind your deadlines. Understand how urgency maps to your available work time so you can plan with accuracy, not anxiety.</div>
+          </div>
+          <span class="tool-arrow">→</span>
+        </a>
+
+        <a href="https://notionelevation.com/notion-elevation-tools/daily-focus-tracker/" class="tool-item">
+          <span class="tool-number">03</span>
+          <div class="tool-body">
+            <div class="tool-title">Daily Focus Tracker</div>
+            <div class="tool-desc">Track where your focus actually goes each day. A structured daily logging system that makes your patterns visible so you can improve what matters.</div>
+          </div>
+          <span class="tool-arrow">→</span>
+        </a>
+
+        <a href="https://notionelevation.com/notion-elevation-tools/work-time-to-deadline-converter/" class="tool-item">
+          <span class="tool-number">04</span>
+          <div class="tool-body">
+            <div class="tool-title">Work Time to Deadline Converter</div>
+            <div class="tool-desc">Convert calendar time into real working hours. Know exactly how much productive time you have before a deadline before you commit to it.</div>
+          </div>
+          <span class="tool-arrow">→</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY THIS EXISTS -->
+  <section class="why">
+    <div class="container">
+      <div class="why-inner">
+        <div>
+          <span class="section-label">Why This Exists</span>
+          <h2>Most people don't fail from lack of <em>ideas.</em></h2>
+          <p>They fail from lack of structure. The capability is already there what's missing is the system that makes it impossible to hide.</p>
+          <p>These tools exist to turn abstract thinking into measurable, repeatable systems.</p>
+        </div>
+        <div class="why-quote">
+          <blockquote>
+            "We do not make people more capable. We build the systems that make their existing capability impossible to hide."
+          </blockquote>
+          <cite>— Muganza Bill, Notion Elevation</cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container">
+      <span class="cta-label">Go Deeper</span>
+      <h2>Explore the Full Platform</h2>
+      <p>Templates, frameworks, and creator systems — everything lives on the main platform.</p>
+      <a href="https://notionelevation.com" class="cta-btn">Visit notionelevation.com →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <span class="footer-brand">© 2025 Notion Elevation · Muganza Bill</span>
+      <a href="https://notionelevation.com" class="footer-link">notionelevation.com</a>
+    </div>
+  </footer>
+
+</body>
+</html>
