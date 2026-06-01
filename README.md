@@ -33,6 +33,6 @@ Explore more here: https://notionelevation.com
 
 Why this exists
 
-Most people don’t fail because of ideas — they fail because of structure.
+Most people don’t fail because of ideas they fail because of structure.
 
 Notion Elevation builds systems that bring clarity to thinking and execution.
